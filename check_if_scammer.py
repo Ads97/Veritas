@@ -1,6 +1,7 @@
 from Kamthe.GoogleSearch import search_and_analyze_landlord
 from openai_websearch import get_block_number
 from property_search import get_owner_name
+from Kamthe.SerperAPICall import search_google
 import asyncio 
 
 def are_names_similar(name, potential_name):
@@ -11,10 +12,14 @@ def are_names_similar(name, potential_name):
             return True
     return False
                 
-     
 async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     print(f"🔎 Searching Online")
-    google_results = search_and_analyze_landlord(name, address)
+    query = f"{name} {address}"
+    google_results = search_and_analyze_landlord(name, address, query)
+    
+    # zillow search
+    zillow_results = search_google(f"{address} zillow")
+    analyze_zillow_results = analyze_zillow_results(zillow_results)
     
     print(f"📜🏠 Checking San Francisco Planning Department records")
     block_details = get_block_number(address)
@@ -55,8 +60,10 @@ async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     
     
 async def main():
-    name = "Mary McClelland"
-    address = "1300 Lawton St #307, San Francisco, CA 94122"
+    # name = "Mary McClelland"
+    # address = "1300 Lawton St #307, San Francisco, CA 94122"
+    name = "Sonia Riley"
+    address = "1106 Bush St #504, San Francisco, CA 94109"
     listing_url = ""
     other_details = ""
     result = await check_if_scammer(name, address, listing_url, other_details)
