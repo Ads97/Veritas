@@ -6,9 +6,30 @@ def are_names_similar(name, potential_name):
     potential_name_words = potential_name.split(' ')
     name_words = name.split(' ')
     return False
- 
+
+def pretty_print_search_results(results):
+    print(    f"""
+    ==== 🔎 Online Search Execution Summary ====
+
+    Analyses:
+    {analyses}
+    
+    Queries Tried:
+    {query}
+
+    Search Results:
+    {results}
+
+    Status:
+    {"✅ Success" if True else "❌ Failed"}
+
+    Error:
+    {None if None else "N/A"}
+    """)
+     
 def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     google_results = search_and_analyze(name, address)
+    pretty_print_search_results(google_results)
     block_details = get_block_number(address)
     potential_owner_names = get_owner_name(block_number=block_details.block_number, lot_number=block_details.lot_number)
     
@@ -98,7 +119,12 @@ def check_if_scammer_mock(name, address,listing_url, other_details, **kwargs):
 
 
     
-    
+if __name__ == "__main__":
+    name = "Dustin Suchter"
+    address = "88 King Street, Unit 116, San Francisco 94107"
+    listing_url = ""
+    other_details = ""
+    check_if_scammer(name, address,listing_url, other_details)
     
     
     

@@ -27,7 +27,7 @@ def analyze_link_suspiciousness(name, address, result):
     scraped_content = scrape_url_simple(result['link'])
     
     prompt = f"""
-    Your task is to analyze the following information and determine if this "landlord" is a potential scmamer. Here are the results I got when I searched google for information about the "landlord". 
+    Your task is to analyze the following information and determine if this "landlord" is a potential scammer. Here are the results I got when I searched google for information about the "landlord". 
     
     Search Result Info:
     Title: {result['title']}
