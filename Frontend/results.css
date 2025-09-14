@@ -1,14 +1,24 @@
-/* Header theme variants layered on top of .header from styles.css */
-.header--red  { background: #FDE8E8 !important; color: #9B1C1C; }
-.header--green{ background: #E6F4EA !important; color: #1E7E34; }
-.header--grey { background: #F3F4F6 !important; color: #111827; }
+/* Remove header theme variants - keep original header styling from index.html */
 
 /* Sections (non-intrusive with existing tokens) */
-.section-heading    { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
+.section-heading    { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; text-align: center; }
 .section-subheading { font-size: 1rem;  font-weight: 600; margin: 1.25rem 0 .75rem; }
 .section-spaced     { margin-top: 1rem; }
 
-.likelihood { text-align: center; margin: .75rem 0 1rem; }
+.likelihood { 
+    text-align: center; 
+    margin: .75rem 0 1rem; 
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid transparent;
+    background: transparent;
+}
+
+/* Conditional box styling for scam likelihood */
+.likelihood--high { border-color: #dc2626; }
+.likelihood--low { border-color: #16a34a; }
+.likelihood--inconclusive { border-color: #4b5563; }
 .divider    { border: none; border-top: 1px solid #e5e7eb; margin: 1rem 0; }
 .muted      { color: #6b7280; }
 
