@@ -65,3 +65,5 @@ WARNING  [cdp_use.client] WebSocket connection closed: no close frame received o
 🪪 Found previous owner names BIGGIO FAMILY TRUST, (E) LAWTON APARTMENTS LLC, (R) "123 CORBETT LP, DELAWARE LTD PTNS", (E) SFUSD, (R) BIGGIO CATHERINE, (E) BIGGIO CATHERINE L, (R) BIGGIO ELMO D, (E) BIGGIO ANNA L
 🚩🚩🚩 RED FLAG ALERT: Declared owner does not match owner names in county records!! 🚩🚩🚩
 ====== SUMMARY =====
+
+https://www.zillow.com/homedetails/1300-Lawton-St-307-San-Francisco-CA-94122/2077142844_zpid/
