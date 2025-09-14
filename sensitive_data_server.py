@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 os.environ['ANONYMIZED_TELEMETRY'] = "false"
 
-
-company_credentials = {'x_user': 'advaithsridhar@live.com', 'x_pass': 'Ch@rmander2'}
-
 # Option 1: Secrets available for all websites
 sensitive_data = company_credentials
 

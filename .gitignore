@@ -1,2 +1,5 @@
 .env
 launch.json
+Kamthe/__pycache__
+Kamthe/myenv/
+.DS_Store
