@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from check_if_scammer import check_if_scammer
+from check_if_scammer import check_if_scammer, check_if_scammer_mock
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -32,7 +32,7 @@ def fetch_information():
                            if k not in ['name', 'address', 'listing_url', 'other_details']}
         
         # Call the scammer check function with all parameters
-        scammer_result = check_if_scammer(
+        scammer_result = check_if_scammer_mock(
             name=name, 
             address=address, 
             listing_url=listing_url, 
@@ -40,22 +40,7 @@ def fetch_information():
             **additional_kwargs
         )
         
-        # Create response object
-        response_object = {
-            "status": "success",
-            "message": "Data processed successfully",
-            "scammer_check_result": scammer_result,
-            "processed_data": {
-                "name": name,
-                "address": address,
-                "listing_url": listing_url,
-                "other_details": other_details,
-                "additional_params": additional_kwargs
-            },
-            "timestamp": "2024-01-01T00:00:00Z"
-        }
-        
-        return jsonify(response_object), 200
+        return jsonify(scammer_result), 200
         
     except Exception as e:
         # Return error response
