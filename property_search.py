@@ -21,4 +21,8 @@ async def get_owner_name(block_number, lot_number):
 
 async def main():
     block_number = "1865"
-    
+    lot_number = "012"
+    await get_owner_name(block_number=block_number, lot_number=lot_number)
+
+if __name__=="__main__":
+    asyncio.run(main())

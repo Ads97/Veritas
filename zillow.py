@@ -42,7 +42,7 @@ def analyze_zillow(search_results):
     outputs = []
 
     for sr in search_results:
-        print(f"🏠 Analyzing Zillow: {sr.get('title') or sr.get('link')}")
+        print(f"🏠 Analyzing Rentals: {sr.get('title') or sr.get('link')}")
 
         # Scrape the Zillow URL content
         scraped_content = scrape_url_simple(sr["link"])
