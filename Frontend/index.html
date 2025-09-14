@@ -47,7 +47,30 @@
                         <div id="houseAddress-error" class="field-error" role="alert" aria-live="polite"></div>
                     </div>
 
-                    <!-- Field 2: House Listing URL -->
+                    <!-- Field 2: Landlord Name -->
+                    <div class="field-group">
+                        <label for="landlordName" class="field-label">
+                            <span class="label-text">Landlord Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="landlordName" 
+                            name="landlordName" 
+                            class="field-input" 
+                            placeholder="Enter landlord name here"
+                            required
+                            minlength="1"
+                            maxlength="100"
+                            aria-describedby="landlordName-hint landlordName-error"
+                        >
+                        <div id="landlordName-hint" class="field-hint">
+                            e.g., John Smith or ABC Property Management
+                        </div>
+                        <div id="landlordName-error" class="field-error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Field 3: House Listing URL -->
                     <div class="field-group">
                         <label for="listingUrl" class="field-label">
                             <span class="label-text">House listing URL</span>

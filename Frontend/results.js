@@ -16,12 +16,7 @@ function computeLikelihood(clear_outcome, scam_likelihood) {
   return Math.round(Math.min(Math.max(n, 0), 1) * 100);
 }
 
-// Apply header theme
-function setHeaderTheme(score) {
-  header.classList.remove("header--red","header--green","header--grey");
-  if (score === "Inconclusive") { header.classList.add("header--grey"); return; }
-  header.classList.add(score > 50 ? "header--red" : "header--green");
-}
+// Header theme function removed - keeping original header styling from index.html
 
 // Render helpers
 function renderReasons(items) {
@@ -33,7 +28,7 @@ function renderReasons(items) {
   for (const [kind, text] of items) {
     const li = document.createElement("li");
     const good = kind === "good";
-    const icon = good ? "✅" : "❌";
+    const icon = good ? "✅" : "⚠️";
     li.innerHTML = `<span class="${good ? "reason--good" : "reason--bad"}">${icon}</span> ${esc(text||"")}`;
     ul.appendChild(li);
   }
@@ -65,6 +60,24 @@ function renderQuestions(arr) {
   }
 }
 
+function renderSources(arr) {
+  const ul = $("#sources-list");
+  const empty = $("#sources-empty");
+  ul.innerHTML = "";
+  if (!Array.isArray(arr) || arr.length === 0) { empty.hidden = false; return; }
+  empty.hidden = true;
+  for (const url of arr) {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = url || "";
+    link.textContent = url || "";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    li.appendChild(link);
+    ul.appendChild(li);
+  }
+}
+
 // ---- Data load ----
 // Preferred: read address from query (?address=...) or from sessionStorage key "veritas_address"
 function getInputAddress() {
@@ -83,8 +96,8 @@ async function fetchResults(address) {
 function getMockResults(address) {
   // Simulate different scenarios based on address content
   const addressLower = address.toLowerCase();
-  const isHighRisk = addressLower.includes('suspicious') || addressLower.includes('scam') || addressLower.includes('wire');
-  const isLowRisk = addressLower.includes('legitimate') || addressLower.includes('safe') || addressLower.includes('verified');
+  const isHighRisk = addressLower.includes('mathilda');
+  const isLowRisk = addressLower.includes('king st');
   
   if (isHighRisk) {
     return {
@@ -110,6 +123,11 @@ function getMockResults(address) {
         "Can you schedule an in-person viewing of the property?",
         "Has the landlord provided verifiable references or credentials?",
         "Are there any official property management companies associated with this listing?"
+      ],
+      sources: [
+        "https://www.ftc.gov/tips-advice/business-center/guidance/rental-listing-scams",
+        "https://www.consumer.ftc.gov/articles/0079-rental-scams",
+        "https://www.apartments.com/rental-manager/resources/article/rental-scams"
       ]
     };
   } else if (isLowRisk) {
@@ -134,6 +152,10 @@ function getMockResults(address) {
         "Have you completed the background check process?",
         "Are all lease terms clearly documented?",
         "Have you verified the property management company's credentials?"
+      ],
+      sources: [
+        "https://www.hud.gov/topics/rental_assistance/tenantrights",
+        "https://www.nolo.com/legal-encyclopedia/renters-rights"
       ]
     };
   } else {
@@ -155,6 +177,9 @@ function getMockResults(address) {
         "What payment methods are being requested?",
         "Have you been able to view the property in person?",
         "Are there any unusual requests or pressure tactics?"
+      ],
+      sources: [
+        "https://www.consumer.ftc.gov/articles/0079-rental-scams"
       ]
     };
   }
@@ -181,16 +206,27 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // Compute score text
     const score = computeLikelihood(data.clear_outcome, data.scam_likelihood);
-    setHeaderTheme(score);
 
     // Populate header/summary
     $("#result-address").textContent = `Results for ${data.address || address || "Unknown Address"}`;
     $("#likelihood-value").textContent = (score === "Inconclusive") ? "Inconclusive" : `${score}%`;
 
+    // Apply conditional styling to likelihood box
+    const likelihoodEl = $(".likelihood");
+    likelihoodEl.classList.remove("likelihood--high", "likelihood--low", "likelihood--inconclusive");
+    if (score === "Inconclusive") {
+      likelihoodEl.classList.add("likelihood--inconclusive");
+    } else if (score > 50) {
+      likelihoodEl.classList.add("likelihood--high");
+    } else {
+      likelihoodEl.classList.add("likelihood--low");
+    }
+
     // Render lists
     renderReasons(data.reasons || []);
     renderAnalyzedData(data.analyzed_data || []);
     renderQuestions(data.additional_questions || []);
+    renderSources(data.sources || []);
 
     statusEl.innerHTML = "";
     card.hidden = false;

@@ -51,6 +51,7 @@ function initializeEventListeners() {
     
     // Real-time validation
     document.getElementById('houseAddress').addEventListener('input', validateHouseAddress);
+    document.getElementById('landlordName').addEventListener('input', validateLandlordName);
     document.getElementById('listingUrl').addEventListener('input', validateListingUrl);
     document.getElementById('otherDetails').addEventListener('input', handleTextareaInput);
     document.getElementById('privacyConsent').addEventListener('change', validateConsent);
@@ -262,6 +263,36 @@ function validateHouseAddress() {
     return true;
 }
 
+function validateLandlordName() {
+    const input = document.getElementById('landlordName');
+    const error = document.getElementById('landlordName-error');
+    const value = input.value.trim();
+    
+    clearFieldError(input, error);
+    
+    if (!value) {
+        if (input.dataset.touched) {
+            showFieldError(input, error, 'Landlord name is required');
+            return false;
+        }
+        return true;
+    }
+    
+    input.dataset.touched = 'true';
+    
+    if (value.length < 1) {
+        showFieldError(input, error, 'Landlord name must be at least 1 character long');
+        return false;
+    }
+    
+    if (value.length > 100) {
+        showFieldError(input, error, 'Landlord name must be less than 100 characters');
+        return false;
+    }
+    
+    return true;
+}
+
 function validateListingUrl() {
     const input = document.getElementById('listingUrl');
     const error = document.getElementById('listingUrl-error');
@@ -335,15 +366,17 @@ function validateConsent() {
 
 function validateForm() {
     const isAddressValid = validateHouseAddress();
+    const isLandlordNameValid = validateLandlordName();
     const isUrlValid = validateListingUrl();
     const isDetailsValid = validateOtherDetails();
     const isConsentValid = validateConsent();
     
     // Mark all fields as touched for validation display
     document.getElementById('houseAddress').dataset.touched = 'true';
+    document.getElementById('landlordName').dataset.touched = 'true';
     document.getElementById('listingUrl').dataset.touched = 'true';
     
-    return isAddressValid && isUrlValid && isDetailsValid && isConsentValid;
+    return isAddressValid && isLandlordNameValid && isUrlValid && isDetailsValid && isConsentValid;
 }
 
 // Form Submission
@@ -370,9 +403,13 @@ async function handleFormSubmit(event) {
         
         if (response.ok) {
             const result = await response.json();
-            showSuccess(result);
-            clearForm();
-            clearDraftFromStorage();
+            
+            // Save address to sessionStorage for results page
+            const address = document.getElementById('houseAddress').value.trim();
+            sessionStorage.setItem('veritas_address', address);
+            
+            // Navigate to results page
+            window.location.href = 'results.html';
         } else {
             const error = await response.json();
             showError(error);
@@ -442,6 +479,7 @@ async function simulateFileUpload(fileData) {
 function collectFormData(attachments) {
     return {
         houseAddress: document.getElementById('houseAddress').value.trim(),
+        landlordName: document.getElementById('landlordName').value.trim(),
         listingUrl: document.getElementById('listingUrl').value.trim(),
         otherDetails: document.getElementById('otherDetails').value.trim(),
         attachments: attachments,
@@ -469,7 +507,7 @@ async function submitForm(formData) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Simulate different responses for testing
-    const shouldSucceed = Math.random() > 0.3; // 70% success rate for demo
+    const shouldSucceed = Math.random() >= 0; // 100% success rate for demo
     
     if (shouldSucceed) {
         return {
@@ -613,6 +651,7 @@ function saveDraftToStorage() {
     try {
         const draftData = {
             houseAddress: document.getElementById('houseAddress').value,
+            landlordName: document.getElementById('landlordName').value,
             listingUrl: document.getElementById('listingUrl').value,
             otherDetails: document.getElementById('otherDetails').value,
             privacyConsent: document.getElementById('privacyConsent').checked,
@@ -649,6 +688,7 @@ function loadDraftFromStorage() {
         
         // Restore form values
         document.getElementById('houseAddress').value = draft.houseAddress || '';
+        document.getElementById('landlordName').value = draft.landlordName || '';
         document.getElementById('listingUrl').value = draft.listingUrl || '';
         document.getElementById('otherDetails').value = draft.otherDetails || '';
         document.getElementById('privacyConsent').checked = draft.privacyConsent || false;
