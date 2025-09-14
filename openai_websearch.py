@@ -22,7 +22,10 @@ def get_block_number(address):
     text_format=HouseID,
     )
 
-    return response.output_parsed
+    result = response.output_parsed
+    if result.block_number and result.lot_number:
+        return result
+    raise Exception("Could not find block or lot number :(")
 
 # Run the async function
 if __name__ == "__main__":
