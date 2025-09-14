@@ -62,6 +62,6 @@ Inconclusive: Alive Or Dead
 
 INFO     [Agent] ✅ Task completed successfully
 WARNING  [cdp_use.client] WebSocket connection closed: no close frame received or sent
-🪪 Found previous owner names TREASURE ISLAND SERIES 1 LLC, DESILVA GATES CONSTRUCTION LLC, CHANG WUISTON O, CHANG STEVEN MAN TAK, TAMURA STEFANIE, MERCHANTS BONDING COMPANY (MUTUAL), KANALEY COLLEEN B, MERCHANTS BONDING COMPANY (MUTUAL), HOFFMAN SUSAN, MERCHANTS BONDING COMPANY (MUTUAL)
+🪪 Found previous owner names BIGGIO FAMILY TRUST, (E) LAWTON APARTMENTS LLC, (R) "123 CORBETT LP, DELAWARE LTD PTNS", (E) SFUSD, (R) BIGGIO CATHERINE, (E) BIGGIO CATHERINE L, (R) BIGGIO ELMO D, (E) BIGGIO ANNA L
 🚩🚩🚩 RED FLAG ALERT: Declared owner does not match owner names in county records!! 🚩🚩🚩
 ====== SUMMARY =====

@@ -19,3 +19,6 @@ async def get_owner_name(block_number, lot_number):
     owners: Owners = history.structured_output
     return owners.owners
 
+async def main():
+    block_number = "1865"
+    
