@@ -63,7 +63,7 @@ window.ANALYSIS_DATA = {
         ]
       }
     ],
-    "footer_italics": "🚩🚩🚩 RED FLAG ALERT: Declared owner does not match owner names in county records!! 🚩🚩🚩"
+    "footer_italics": "🚩 RED FLAG: Declared owner does not match owner names in county records 🚩"
   },
   "88 King Street, Unit 116, San Francisco 94107": {
     "heading": "🔎 Searching Online",

@@ -111,11 +111,8 @@
       await wait(250);
     }
 
-    // Footer italics
-    if (entry.footer_italics) {
-      const ital = `<em>${entry.footer_italics}</em>`;
-      await typeChars(line('p', 'footer-italics', ital), entry.footer_italics, 24);
-    }
+    // Footer italics are now handled by the separate Footer_Italics box
+    // No need to render them here anymore
   }
 
   async function renderFallbackContent(heading, subheading) {
@@ -127,6 +124,56 @@
     // Add a fallback link
     const fallbackLink = line('p', '', '<a href="results.html" style="color: #667eea; text-decoration: underline;">Continue to results →</a>');
     appendBlock(fallbackLink);
+  }
+
+  // Create and manage the Footer_Italics box
+  function createFooterItalicsBox() {
+    const box = document.createElement('div');
+    box.id = 'footerItalicsBox';
+    box.style.cssText = `
+      background: transparent;
+      border: 2px solid #4b5563;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+      transition: border-color 0.3s ease;
+    `;
+    box.textContent = '🔎Analyzing Data Records..';
+    
+    // Insert the box after the video section and before the divider
+    const videoWrap = document.getElementById('videoWrap');
+    const divider = document.querySelector('.divider');
+    videoWrap.parentNode.insertBefore(box, divider);
+    
+    return box;
+  }
+
+  async function updateFooterItalicsBox(box, footerItalicsContent) {
+    // Change border to red
+    box.style.borderColor = '#dc2626';
+    
+    // Clear current content
+    box.textContent = '';
+    
+    // Stream the footer_italics content
+    if (prefersReduced) {
+      box.innerHTML = `<em>${footerItalicsContent}</em>`;
+      return;
+    }
+    
+    // Type out the content character by character
+    for (let i = 0; i < footerItalicsContent.length; i++) {
+      box.textContent += footerItalicsContent[i];
+      await wait(24); // Same speed as other footer-italics content
+    }
+    
+    // After typing is complete, set italic formatting
+    box.innerHTML = `<em>${footerItalicsContent}</em>`;
   }
 
   async function main() {
@@ -143,6 +190,9 @@
         videoEl.style.display = 'none';
         videoPlaceholder.style.display = 'flex';
       };
+
+      // Create the Footer_Italics box immediately
+      const footerItalicsBox = createFooterItalicsBox();
 
       // Get data from sessionStorage
       let address = sessionStorage.getItem('veritas_address');
@@ -163,7 +213,7 @@
           console.log('Successfully loaded global ANALYSIS_DATA');
         } else {
           console.error('Global ANALYSIS_DATA not found');
-          await renderFallbackContent('🔎 Searching Online', 'No data file provided.');
+          await renderFallbackContent('🔎 Searching Public Web Records', 'No data file provided.');
           return;
         }
       }
@@ -174,7 +224,7 @@
         dict = JSON.parse(rawTextJson);
       } catch (e) {
         console.error('JSON parsing error:', e);
-        await renderFallbackContent('🔎 Searching Online', 'Text file is not valid JSON.');
+        await renderFallbackContent('🔎 Searching Public Web Records', 'Text file is not valid JSON.');
         return;
       }
 
@@ -188,12 +238,19 @@
         
         if (!entry) {
           await renderFallbackContent(
-            '🔎 Searching Online', 
+            '🔎 Searching Public Web Records', 
             `No matching entry for "${address || 'Unknown Address'}".`
           );
           return;
         }
       }
+
+      // Set up the 10-second timer to update the Footer_Italics box
+      setTimeout(async () => {
+        if (entry.footer_italics) {
+          await updateFooterItalicsBox(footerItalicsBox, entry.footer_italics);
+        }
+      }, 10000); // 10 seconds
 
       // Render the streaming content
       await renderStreamForAddress(entry);
@@ -204,7 +261,7 @@
 
     } catch (error) {
       console.error('Loading page error:', error);
-      await renderFallbackContent('🔎 Searching Online', 'An error occurred while loading data.');
+      await renderFallbackContent('🔎 Searching Public Web Records', 'An error occurred while loading data.');
     }
   }
 

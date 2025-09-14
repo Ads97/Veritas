@@ -96,8 +96,8 @@ async function fetchResults(address) {
 function getMockResults(address) {
   // Simulate different scenarios based on address content
   const addressLower = address.toLowerCase();
-  const isHighRisk = addressLower.includes('mathilda');
-  const isLowRisk = addressLower.includes('king st');
+  const isHighRisk = addressLower.includes('lawton');
+  const isLowRisk = addressLower.includes('king');
   
   if (isHighRisk) {
     return {
@@ -105,18 +105,18 @@ function getMockResults(address) {
       scam_likelihood: 0.85,
       address: address,
       reasons: [
-        ["bad", "Landlord requesting wire transfer before viewing property"],
+        ["bad", "House owner (BIGGIO Family Trust) is unrelated to claimed landlord (Mary McClelland)"],
         ["bad", "Price significantly below market rate for the area"],
-        ["bad", "Landlord claims to be out of country"],
-        ["bad", "Pressure to send money quickly"],
+        ["bad", "Claimed landlord has no verifiable online presence"],
+        ["bad", "Listing is on Facebook Marketplace, which is commonly used for scams"],
         ["good", "Property photos appear to be legitimate"]
       ],
       analyzed_data: [
-        ["Rental Price", "$1,200/month (65% below market average)"],
-        ["Market Average", "$3,400/month for similar properties"],
-        ["Landlord Contact", "Email only, no phone verification"],
-        ["Property History", "Recently listed on multiple platforms"],
-        ["Payment Method", "Wire transfer requested (high risk)"]
+        ["Rental Price", "$720/month (65% below market average)"],
+        ["Market Average", "$2,500/month for similar properties"],
+        ["Landlord Contact", "Only via a limited-history Facebook account, no phone or email provided"],
+        ["Property History", "Price discrepancy across multiple platforms"],
+        ["Payment Method", "Not Provided"]
       ],
       additional_questions: [
         "Have you been able to verify the landlord's identity through official channels?",
