@@ -7,7 +7,7 @@
 
   const wait = (ms) => new Promise(res => setTimeout(res, ms));
 
-  async function typeChars(el, html, perCharMs = 40) {
+  async function typeChars(el, html, perCharMs = 4) {
     if (prefersReduced) {
       el.innerHTML = html;
       streamContainer.appendChild(el);
@@ -64,20 +64,20 @@
 
   async function renderStreamForAddress(entry) {
     // Heading
-    await typeChars(line('h2', 'section-heading', entry.heading), entry.heading, 35);
-    await wait(200);
+    await typeChars(line('h2', 'section-heading', entry.heading), entry.heading, 5);
+    await wait(5);
     
     // Subheading
-    await typeChars(line('h3', 'section-subheading', entry.subheading), entry.subheading, 30);
-    await wait(200);
+    await typeChars(line('h3', 'section-subheading', entry.subheading), entry.subheading, 5);
+    await wait(5);
     
     // Summary bold
-    await typeChars(line('p', 'summary-bold', `<strong>${entry.summary_bold}</strong>`), entry.summary_bold, 28);
-    await wait(300);
+    await typeChars(line('p', 'summary-bold', `<strong>${entry.summary_bold}</strong>`), entry.summary_bold, 5);
+    await wait(5);
 
     // Separator
     appendBlock(line('pre', 'separator', '------------------------------------------------------------'));
-    await wait(200);
+    await wait(5);
 
     // Process each result
     for (const r of entry.results) {
@@ -85,30 +85,30 @@
       await typeChars(
         line('p', 'result-title', `<strong>${r.n}.</strong> ${r.title}`), 
         `${r.n}. ${r.title}`, 
-        24
+        5
       );
-      await wait(150);
+      await wait(5);
       
       // Result link
       await typeChars(
         line('p', 'result-link', `🔗 <a href="${r.url_label}" target="_blank" rel="noopener">${r.url_label}</a>`),
         `🔗 ${r.url_label}`,
-        24
+        5
       );
-      await wait(150);
+      await wait(5);
       
       // Analyzing line
-      await typeChars(line('p', 'result-analyzing', r.analyzing), r.analyzing, 24);
-      await wait(200);
+      await typeChars(line('p', 'result-analyzing', r.analyzing), r.analyzing, 5);
+      await wait(5);
 
       // Analysis box
       const box = analysisBox(r.analysis || []);
       appendBlock(box);
-      await wait(300);
+      await wait(5);
 
       // Separator
       appendBlock(line('pre', 'separator', '------------------------------------------------------------'));
-      await wait(250);
+      await wait(5);
     }
 
     // Footer italics are now handled by the separate Footer_Italics box
@@ -116,10 +116,10 @@
   }
 
   async function renderFallbackContent(heading, subheading) {
-    await typeChars(line('h2', 'section-heading', heading), heading, 30);
-    await wait(200);
-    await typeChars(line('h3', 'section-subheading', subheading), subheading, 30);
-    await wait(500);
+    await typeChars(line('h2', 'section-heading', heading), heading, 5);
+    await wait(5);
+    await typeChars(line('h3', 'section-subheading', subheading), subheading, 5);
+    await wait(5);
     
     // Add a fallback link
     const fallbackLink = line('p', '', '<a href="results.html" style="color: #667eea; text-decoration: underline;">Continue to results →</a>');
@@ -169,7 +169,7 @@
     // Type out the content character by character
     for (let i = 0; i < footerItalicsContent.length; i++) {
       box.textContent += footerItalicsContent[i];
-      await wait(24); // Same speed as other footer-italics content
+      await wait(5); // Same speed as other footer-italics content
     }
     
     // After typing is complete, set italic formatting
@@ -250,13 +250,13 @@
         if (entry.footer_italics) {
           await updateFooterItalicsBox(footerItalicsBox, entry.footer_italics);
         }
-      }, 10000); // 10 seconds
+      }, 6000); // 10 seconds
 
       // Render the streaming content
       await renderStreamForAddress(entry);
 
       // Wait a bit then redirect
-      await wait(800);
+      await wait(400);
       window.location.href = 'results.html';
 
     } catch (error) {
