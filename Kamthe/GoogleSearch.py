@@ -1,253 +1,148 @@
 from SerperAPICall import search_google
 from firecrawl_scraper import scrape_url_simple
 import requests
-import json
-import time
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
-# OpenRouter API configuration
+# API configuration
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
+# JSON schema for structured output
+AI_OUTPUT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "name_address_match": {
+            "type": "integer",
+            "description": "1 for yes, -1 for no, 0 for unknown"
+        },
+        "scam_fraud_report": {
+            "type": "integer", 
+            "description": "1 for yes, -1 for no, 0 for unknown"
+        },
+        "ownership_proof": {
+            "type": "integer",
+            "description": "1 for yes, -1 for no, 0 for unknown"
+        },
+        "legal_news": {
+            "type": "integer",
+            "description": "1 for yes, -1 for no, 0 for unknown"
+        },
+        "alive_or_dead": {
+            "type": "integer",
+            "description": "1 for yes, -1 for no, 0 for unknown"
+        }
+    },
+    "required": ["name_address_match", "scam_fraud_report", "ownership_proof", "legal_news", "alive_or_dead"]
+}
 
-def analyze_link_suspiciousness(name, address, result):
-    """
-    Scrape URL content and use OpenRouter API to analyze for suspicious content.
+def analyze_landlord(name, address, search_result):
+    """Analyze a single search result for landlord verification."""
+    print(f"📄 Analyzing: {search_result['title']}")
     
-    Args:
-        result (dict): Search result containing title, link, and snippet
+    # Scrape the URL content
+    scraped_content = scrape_url_simple(search_result['link'])
     
-    Returns:
-        str: Analysis of suspicious content or "No suspicious content detected"
-    """
-    # Scrape the URL to get markdown content
-    print(f"    📄 Scraping content from: {result['link']}")
-    scraped_content = scrape_url_simple(result['link'])
-    
+    # Create analysis prompt
     prompt = f"""
     Your task is to analyze the following information and determine if this "landlord" is a potential scammer. Here are the results I got when I searched google for information about the "landlord". 
-    
-    Search Result Info:
-    Title: {result['title']}
-    URL: {result['link']}
-    Snippet: {result['snippet']}
-    
-    Complete Information:
-    {scraped_content[:2000]}...
-    
-    Answer the following questions about the above profile: 
 
-    IMPORTANT: Question 1: (Yes/No/Unknown) Does the name and the address in the above document match with this name ({name}) and address {address}? 
-    Question 2: (Yes/No/NA) Are there ANY scam/fraud reports mentioned for the above name '{name}'?
-    Question 3: (Yes/No/Unknown) Does the above information prove ownership of address '{address}' by name '{name}'?
-    Question 4: (Yes/No/Unknown) Does the above information contain any legal/news mentions (evictions, lawsuits, scams)? 
-    Question 5: (Yes/No/Unknown) Does the above information indicate if the person '{name}' is alive and currently at address '{address}'? If the information indicates the person is dead or currently not at the address, mention 'No'. This is very IMPORTANT!
-
-    If the above information does not help answer the question, mark it "unknown" or NA". 
-        
-    Respond in this exact format:
-    name_address_match: # yes/no/unkonwn for whether the name and address in the above information match '{name}' and '{address}'
-    scam_fraud_report: # yes/no/unkonwn for whether there are any scam/fraud reports mentioned
-    ownership_proof: # yes/no/unkonwn for whether the above information provides proof of ownership
-    legal_news: # yes/no/unknown for whether the above information contain any legal/news mentions
-    alive_or_dead: # yes/no/unknown for if the information indicates the person is dead or currently not at the address
+    Search Result:
+    Title: {search_result['title']}
+    URL: {search_result['link']}
+    Snippet: {search_result['snippet']}
     
-    alert: #(True/False) if any of the above is suspicous, set alert to True
+    Scraped Content: {scraped_content[:3000]}...
+    
+    Answer these questions:
+    1. Does the name and address match {name} at {address}? (Yes/No/Unknown)
+    2. Are there any scam/fraud reports for {name}? (Yes/No/Unknown)
+    3. Does this prove ownership of {address} by {name}? (Yes/No/Unknown)
+    4. Are there any legal issues mentioned? (Yes/No/Unknown)
+    5. Is {name} alive and currently at {address}? (Yes/No/Unknown)
+    
+    Format your response in this exact format:[name_address_match, scam_fraud_report, ownership_proof, legal_news, alive_or_dead] where yes is 1 and no is -1 and everything else is 0.
     """
+
     
+    # Make API request
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:3000",  # Optional: replace with your app's URL
-        "X-Title": "VeritasAI Rental Analysis"  # Optional: replace with your app's name
+        "Content-Type": "application/json"
     }
     
     data = {
-        "model": "anthropic/claude-3.5-sonnet",
+        "model": "openai/gpt-4o",
         "messages": [
-            {"role": "system", "content": "You are a cybersecurity expert analyzing web content for suspicious or harmful elements. Be concise and specific in your analysis."},
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": 300,
-        "temperature": 0.3
+        "max_tokens": 500,
+        "temperature": 0.3,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "landlord_analysis",
+                "schema": AI_OUTPUT_SCHEMA
+            }
+        }
     }
     
     response = requests.post(OPENROUTER_API_URL, headers=headers, json=data)
     response_data = response.json()
-    
-    content = response_data['choices'][0]['message']['content'].strip()
-    
-    # Parse the response to extract alert and analysis
-    lines = content.split('\n')
-    alert = False
-    analysis = content
-    
-    for line in lines:
-        if line.startswith('ALERT:'):
-            alert_str = line.split('ALERT:')[1].strip().lower()
-            alert = alert_str == 'true'
-        elif line.startswith('ANALYSIS:'):
-            analysis = line.split('ANALYSIS:')[1].strip()
-    
-    return {
-        'alert': alert,
-        'analysis': analysis
-    }
+    return response_data['choices'][0]['message']['content'].strip()
 
 
-def analyze_all_results(name, address, results):
-    """
-    Scrape and analyze all search results for suspicious content using OpenRouter AI.
+def search_and_analyze_landlord(name, address):
+    """Search for landlord information and analyze results."""
+    query = f"{name} {address}"
     
-    Args:
-        results (list): List of search result dictionaries
+    print(f"🔍 Searching for: {query}")
     
-    Returns:
-        list: List of analysis results for each link
-    """
-    analyses = []
+    # Search Google
+    results = search_google(query)
     
-    print("🤖 Scraping URLs and running AI analysis using OpenRouter...")
+    if not results:
+        print("❌ No search results found")
+        return
+    
+    print(f"✅ Found {len(results)} results")
     print("-" * 60)
     
+    # Analyze each result
     for i, result in enumerate(results, 1):
-        print(f"🔍 Processing result {i}/{len(results)}: {result['title'][:50]}...")
+        print(f"\n{i}. {result['title']}")
+        print(f"   🔗 {result['link']}")
         
-        analysis_result = analyze_link_suspiciousness(name, address, result)
-        analyses.append({
-            'result': result,
-            'alert': analysis_result['alert'],
-            'analysis': analysis_result['analysis']
-        })
-        
-        # Small delay to avoid rate limiting
-        time.sleep(2)
-    
-    print("✅ Scraping and AI analysis completed!")
-    return analyses
-
-
-def search_and_analyze(name, address):
-    query = name + address
-    """
-    Search Google for a query and analyze results using OpenRouter AI.
-    
-    Args:
-        query (str): The search query to analyze
-    
-    Returns:
-        dict: Dictionary containing search results and AI analysis
-        {
-            'query': str,
-            'search_results': list,
-            'analyses': list,
-            'success': bool,
-            'error': str (if any)
-        }
-    """
-    try:
-        # Validate input
-        if not query or not query.strip():
-            return {
-                'query': query,
-                'search_results': [],
-                'analyses': [],
-                'success': False,
-                'error': 'Empty query provided'
-            }
-        
-        # Search Google
-        results = search_google(query.strip())
-        
-        if not results:
-            return {
-                'query': query,
-                'search_results': [],
-                'analyses': [],
-                'success': False,
-                'error': 'No search results found'
-            }
-        
-        # Analyze results with AI
-        analyses = analyze_all_results(name, address, results)
-        
-        return {
-            'query': query,
-            'search_results': results,
-            'analyses': analyses,
-            'success': True,
-            'error': None
-        }
-        
-    except Exception as e:
-        return {
-            'query': query,
-            'search_results': [],
-            'analyses': [],
-            'success': False,
-            'error': str(e)
-        }
+        analysis = analyze_landlord(name, address, result)
+        print(f"   🤖 Analysis: {analysis}")
+        print("-" * 60)
 
 
 def main():
-    """Main function to get user input, search Google, and automatically analyze results with AI."""
-    print("=== Google Search Tool with AI Analysis ===")
-    print("Enter the name and address to search for potential rental scam information.")
-    print("Results will be automatically analyzed using OpenRouter AI for suspicious content.\n")
-    
+    """Main function to run the landlord verification tool."""
     try:
-        # Get user input
-        name = input("Enter the person's name: ").strip()
-        address = input("Enter the address: ").strip()
+        # Get user input with default values
+        name_input = input("Enter the person's name (default: Tammy Carpenter): ").strip()
+        name = name_input if name_input else "Tammy Carpenter"
         
-        # Use the abstracted function
-        result = search_and_analyze(name, address)
+        address_input = input("Enter the address (default: 21686 Drexel Street, Clinton Township, MI 48036): ").strip()
+        address = address_input if address_input else "21686 Drexel Street, Clinton Township, MI 48036"
         
-        if not result['success']:
-            print(f"Error: {result['error']}")
-            return
+        print(f"\n🏠 Verifying landlord: {name}")
+        print(f"📍 Address: {address}")
+        print("=" * 60)
         
-        # Display results
-        print(f"\nSearching for: '{result['query']}'...")
-        print("-" * 60)
+        # Search and analyze
+        search_and_analyze_landlord(name, address)
         
-        if result['search_results']:
-            print(f"Found {len(result['search_results'])} results:\n")
-            for i, search_result in enumerate(result['search_results'], 1):
-                print(f"{i}. {search_result['title']}")
-                print(f"   🔗 {search_result['link']}")
-                print(f"   📝 {search_result['snippet']}")
-                print()
-            
-            # Display AI analysis
-            print("\n" + "=" * 80)
-            print("🛡️  AI ANALYSIS RESULTS (via OpenRouter)")
-            print("=" * 80)
-            
-            for i, analysis_data in enumerate(result['analyses'], 1):
-                search_result = analysis_data['result']
-                alert = analysis_data['alert']
-                analysis = analysis_data['analysis']
-                
-                alert_icon = "🚨" if alert else "✅"
-                alert_status = "ALERT" if alert else "SAFE"
-                
-                print(f"\n{i}. {search_result['title']}")
-                print(f"   🔗 {search_result['link']}")
-                print(f"   {alert_icon} Status: {alert_status}")
-                print(f"   🤖 AI Analysis: {analysis}")
-                print("-" * 60)
-        
-        print("\n" + "=" * 60)
-        print("Analysis complete!")
+        print("\n✅ Analysis complete!")
         
     except KeyboardInterrupt:
-        print("\n\nProgram interrupted by user. Goodbye!")
+        print("\n\n👋 Goodbye!")
     except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
-        print("Please try again.")
+        print(f"❌ Error: {str(e)}")
 
 
 if __name__ == "__main__":
