@@ -2,19 +2,20 @@ from browser_use import Agent, ChatOpenAI, Browser
 from dotenv import load_dotenv
 import asyncio
 import os 
+from typing import List
+from pydantic import BaseModel
 
 load_dotenv()
-os.environ['ANONYMIZED_TELEMETRY'] = "false"
 
-async def main():
+class Owners(BaseModel):
+    owners: List[str]
+    
+async def get_owner_name(block_number, lot_number):
     llm = ChatOpenAI(model="gpt-4.1")
-    task = "Go to this url https://recorder.sfgov.org/#!/simple. Enter the block number 3793 and lot number 028. IMPORTANT: Leave all other fields blank. Hit search. return the list of names that appears on the page and end immediately - don't navigate on the page."
-    agent = Agent(task=task, llm=llm)
+    url = "https://recorder.sfgov.org/#!/simple"
+    task = f"Go to this url {url}. Enter the block number {block_number} and lot number {lot_number}. IMPORTANT: Leave all other fields blank. Hit search. return the list of names that appears on the page and end immediately - don't navigate on the page."
+    agent = Agent(task=task, llm=llm, output_model_schema=Owners)
     history=await agent.run(max_steps=20)
-    result = history.final_result()
-    if not result:
-        raise Exception(f"Browser use returned None!")
-    print(f"{result=}")
+    owners: Owners = history.structured_output
+    return owners.owners
 
-if __name__ == "__main__":
-    asyncio.run(main())
