@@ -12,7 +12,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
-def analyze_link_suspiciousness(result):
+def analyze_link_suspiciousness(name, address, result):
     """
     Scrape URL content and use OpenRouter API to analyze for suspicious content.
     
@@ -27,32 +27,34 @@ def analyze_link_suspiciousness(result):
     scraped_content = scrape_url_simple(result['link'])
     
     prompt = f"""
-    You are a helpful agent who is helping me to research on someone who I have met online for a rental, these are the results I got when I searched google about them using their name and address. Can you check for the following things - 
-
-    Check if the name and address are matching in reliable sources (property/tax records, directories).
-    Confirm ownership/residency 
-    Check for scam/fraud reports linked to name/address.
-    Look for duplicate or inconsistent rental listings.
-    Scan for legal/news mentions (evictions, lawsuits, scams).
-    Check if person is alive or currently located elsewhere (e.g., another country) - This is very important, if the name shows up in some other country then flag it in the final analysis.
-    Note if another person's name shows up as owner/resident for the property.
-    If the source is not trust worthy, then dont worry about it 
-
+    Your task is to analyze the following information and determine if this "landlord" is a potential scmamer. Here are the results I got when I searched google for information about the "landlord". 
     
     Search Result Info:
     Title: {result['title']}
     URL: {result['link']}
     Snippet: {result['snippet']}
     
-    Scraped Content from URL:
+    Complete Information:
     {scraped_content[:2000]}...
     
-    IMPORTANT: Respond in this exact format:
-    ALERT: [true/false]
-    ANALYSIS: [Your analysis here]
+    Answer the following questions about the above profile: 
+
+    IMPORTANT: Question 1: (Yes/No/Unknown) Does the name and the address in the above document match with this name ({name}) and address {address}? 
+    Question 2: (Yes/No/NA) Are there ANY scam/fraud reports mentioned for the above name '{name}'?
+    Question 3: (Yes/No/Unknown) Does the above information prove ownership of address '{address}' by name '{name}'?
+    Question 4: (Yes/No/Unknown) Does the above information contain any legal/news mentions (evictions, lawsuits, scams)? 
+    Question 5: (Yes/No/Unknown) Does the above information indicate if the person '{name}' is alive and currently at address '{address}'? If the information indicates the person is dead or currently not at the address, mention 'No'. This is very IMPORTANT!
+
+    If the above information does not help answer the question, mark it "unknown" or NA". 
+        
+    Respond in this exact format:
+    name_address_match: # yes/no/unkonwn for whether the name and address in the above information match '{name}' and '{address}'
+    scam_fraud_report: # yes/no/unkonwn for whether there are any scam/fraud reports mentioned
+    ownership_proof: # yes/no/unkonwn for whether the above information provides proof of ownership
+    legal_news: # yes/no/unknown for whether the above information contain any legal/news mentions
+    alive_or_dead: # yes/no/unknown for if the information indicates the person is dead or currently not at the address
     
-    Set ALERT to true if you find any suspicious elements, scam indicators, or red flags.
-    Set ALERT to false if nothing suspicious is detected.
+    alert: #(True/False) if any of the above is suspicous, set alert to True
     """
     
     headers = {
@@ -95,7 +97,7 @@ def analyze_link_suspiciousness(result):
     }
 
 
-def analyze_all_results(results):
+def analyze_all_results(name, address, results):
     """
     Scrape and analyze all search results for suspicious content using OpenRouter AI.
     
@@ -113,7 +115,7 @@ def analyze_all_results(results):
     for i, result in enumerate(results, 1):
         print(f"🔍 Processing result {i}/{len(results)}: {result['title'][:50]}...")
         
-        analysis_result = analyze_link_suspiciousness(result)
+        analysis_result = analyze_link_suspiciousness(name, address, result)
         analyses.append({
             'result': result,
             'alert': analysis_result['alert'],
@@ -127,7 +129,8 @@ def analyze_all_results(results):
     return analyses
 
 
-def search_and_analyze(query):
+def search_and_analyze(name, address):
+    query = name + address
     """
     Search Google for a query and analyze results using OpenRouter AI.
     
@@ -168,7 +171,7 @@ def search_and_analyze(query):
             }
         
         # Analyze results with AI
-        analyses = analyze_all_results(results)
+        analyses = analyze_all_results(name, address, results)
         
         return {
             'query': query,
@@ -191,15 +194,16 @@ def search_and_analyze(query):
 def main():
     """Main function to get user input, search Google, and automatically analyze results with AI."""
     print("=== Google Search Tool with AI Analysis ===")
-    print("Enter your search query to get the top 5 results from Google.")
+    print("Enter the name and address to search for potential rental scam information.")
     print("Results will be automatically analyzed using OpenRouter AI for suspicious content.\n")
     
     try:
         # Get user input
-        query = input("Enter your search query: ").strip()
+        name = input("Enter the person's name: ").strip()
+        address = input("Enter the address: ").strip()
         
         # Use the abstracted function
-        result = search_and_analyze(query)
+        result = search_and_analyze(name, address)
         
         if not result['success']:
             print(f"Error: {result['error']}")
