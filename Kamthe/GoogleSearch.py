@@ -95,9 +95,8 @@ def analyze_landlord(name, address, search_result):
     return response_data['choices'][0]['message']['content'].strip()
 
 
-def search_and_analyze_landlord(name, address):
+def search_and_analyze_landlord(name, address, query):
     """Search for landlord information and analyze results."""
-    query = f"{name} {address}"
     
     print(f"🔍 Searching for: {query}")
     
