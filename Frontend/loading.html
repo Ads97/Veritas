@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Veritas AI — Loading</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Additional styles for loading page */
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #videoWrap {
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    #loadingVideo {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .skip {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .skip a {
+      color: #667eea;
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    .skip a:hover {
+      color: #5a67d8;
+    }
+
+    .divider {
+      border: none;
+      height: 2px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 2rem 0;
+      border-radius: 1px;
+    }
+
+    #streamContainer {
+      flex: 1;
+      padding-bottom: 2rem;
+    }
+
+    .section-heading {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 1rem;
+    }
+
+    .section-subheading {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 1rem;
+    }
+
+    .summary-bold {
+      font-size: 1rem;
+      color: #059669;
+      margin-bottom: 1rem;
+    }
+
+    .separator {
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin: 1rem 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .result-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-link {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-link a {
+      color: #667eea;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .result-link a:hover {
+      text-decoration: underline;
+    }
+
+    .result-analyzing {
+      font-size: 0.875rem;
+      color: #374151;
+      margin-bottom: 1rem;
+    }
+
+    .analysis-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .analysis-box p {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    .analysis-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .analysis-list li {
+      font-size: 0.875rem;
+      color: #4b5563;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .analysis-list li:last-child {
+      border-bottom: none;
+    }
+
+    .footer-italics {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 1.5rem;
+    }
+
+    /* Video placeholder styles */
+    .video-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 300px;
+      background: #f3f4f6;
+      border: 2px dashed #d1d5db;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 0 auto;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      #loadingVideo {
+        border-radius: 0.5rem;
+      }
+      
+      .section-heading {
+        font-size: 1.25rem;
+      }
+      
+      .section-subheading {
+        font-size: 1rem;
+      }
+      
+      .separator {
+        font-size: 0.625rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="container">
+        <h1 class="title">Veritas AI</h1>
+        <p class="subtitle">AI tool for rental scam detection</p>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <section id="videoWrap">
+          <video id="loadingVideo" autoplay muted playsinline controls style="display: none;"></video>
+          <div id="videoPlaceholder" class="video-placeholder" style="display: none;">
+            No Video Provided
+          </div>
+        </section>
+
+        <hr class="divider" />
+
+        <section id="streamContainer" aria-live="polite"></section>
+      </div>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="js/loading.js" defer></script>
+</body>
+</html>

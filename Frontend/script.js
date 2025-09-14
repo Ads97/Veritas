@@ -404,12 +404,13 @@ async function handleFormSubmit(event) {
         if (response.ok) {
             const result = await response.json();
             
-            // Save address to sessionStorage for results page
+            // Save address to sessionStorage for loading page
             const address = document.getElementById('houseAddress').value.trim();
             sessionStorage.setItem('veritas_address', address);
             
-            // Navigate to results page
-            window.location.href = 'results.html';
+            
+            // Navigate to loading page
+            window.location.href = 'loading.html';
         } else {
             const error = await response.json();
             showError(error);

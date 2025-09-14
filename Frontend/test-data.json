@@ -1,0 +1,122 @@
+{
+  "88 King Street, Unit 116, San Francisco 94107": {
+    "heading": "🔎 Searching Online",
+    "subheading": "🔍 Searching for: Dustin Suchter 88 King Street, Unit 116, San Francisco 94107",
+    "summary_bold": "✅ Found 5 results",
+    "results": [
+      {
+        "n": 1,
+        "title": "88 King Street, San Francisco, CA 94107 - 54 unit Rentals - Zumper",
+        "url_label": "https://www.zumper.com/address/88-king-st-san-francisco-ca-94107-usa",
+        "analyzing": "📄 Analyzing: 88 King Street, San Francisco, CA 94107 - 54 unit Rentals - Zumper",
+        "analysis": [
+          "Inconclusive: Name Address Match",
+          "Inconclusive: Scam Fraud Report",
+          "Inconclusive: Ownership Proof",
+          "Inconclusive: Legal News",
+          "Inconclusive: Alive Or Dead"
+        ]
+      },
+      {
+        "n": 2,
+        "title": "Owner Details for (215) 527-8559 Revealed | Zabasearch",
+        "url_label": "https://www.zabasearch.com/phone/2155278559/",
+        "analyzing": "📄 Analyzing: Owner Details for (215) 527-8559 Revealed | Zabasearch",
+        "analysis": [
+          "Name Address Match: ✅",
+          "Inconclusive: Scam Fraud Report",
+          "Inconclusive: Ownership Proof",
+          "Inconclusive: Legal News",
+          "Inconclusive: Alive Or Dead"
+        ]
+      },
+      {
+        "n": 3,
+        "title": "Property Records for 88 King Street - San Francisco County",
+        "url_label": "https://www.propertyrecords.com/88-king-street-sf",
+        "analyzing": "📄 Analyzing: Property Records for 88 King Street - San Francisco County",
+        "analysis": [
+          "Inconclusive: Name Address Match",
+          "Inconclusive: Scam Fraud Report",
+          "Ownership Proof: ✅",
+          "Inconclusive: Legal News",
+          "Inconclusive: Alive Or Dead"
+        ]
+      },
+      {
+        "n": 4,
+        "title": "Dustin Suchter - LinkedIn Professional Profile",
+        "url_label": "https://www.linkedin.com/in/dustin-suchter",
+        "analyzing": "📄 Analyzing: Dustin Suchter - LinkedIn Professional Profile",
+        "analysis": [
+          "Name Address Match: ✅",
+          "Inconclusive: Scam Fraud Report",
+          "Inconclusive: Ownership Proof",
+          "Inconclusive: Legal News",
+          "Alive Or Dead: ✅"
+        ]
+      },
+      {
+        "n": 5,
+        "title": "San Francisco Rental Scam Database - ScamWatch",
+        "url_label": "https://www.scamwatch.gov/rental-scams/sf-database",
+        "analyzing": "📄 Analyzing: San Francisco Rental Scam Database - ScamWatch",
+        "analysis": [
+          "Inconclusive: Name Address Match",
+          "Scam Fraud Report: ❌ No reports found",
+          "Inconclusive: Ownership Proof",
+          "Inconclusive: Legal News",
+          "Inconclusive: Alive Or Dead"
+        ]
+      }
+    ],
+    "footer_italics": "📜🏠 Checking San Francisco Planning Department records"
+  },
+  "123 Main Street, Anytown, CA 90210": {
+    "heading": "🔎 Searching Online",
+    "subheading": "🔍 Searching for: John Doe 123 Main Street, Anytown, CA 90210",
+    "summary_bold": "✅ Found 3 results",
+    "results": [
+      {
+        "n": 1,
+        "title": "123 Main Street Property Listing - Realtor.com",
+        "url_label": "https://www.realtor.com/property/123-main-street-anytown-ca",
+        "analyzing": "📄 Analyzing: 123 Main Street Property Listing - Realtor.com",
+        "analysis": [
+          "Name Address Match: ✅",
+          "Inconclusive: Scam Fraud Report",
+          "Ownership Proof: ✅",
+          "Inconclusive: Legal News",
+          "Inconclusive: Alive Or Dead"
+        ]
+      },
+      {
+        "n": 2,
+        "title": "John Doe - Public Records Search",
+        "url_label": "https://www.publicrecords.com/john-doe-anytown",
+        "analyzing": "📄 Analyzing: John Doe - Public Records Search",
+        "analysis": [
+          "Name Address Match: ✅",
+          "Scam Fraud Report: ❌ No reports found",
+          "Inconclusive: Ownership Proof",
+          "Inconclusive: Legal News",
+          "Alive Or Dead: ✅"
+        ]
+      },
+      {
+        "n": 3,
+        "title": "Anytown Rental Scam Alerts - Local News",
+        "url_label": "https://www.anytownnews.com/rental-scam-alerts",
+        "analyzing": "📄 Analyzing: Anytown Rental Scam Alerts - Local News",
+        "analysis": [
+          "Inconclusive: Name Address Match",
+          "Scam Fraud Report: ❌ No reports found",
+          "Inconclusive: Ownership Proof",
+          "Legal News: ✅ Clean record",
+          "Inconclusive: Alive Or Dead"
+        ]
+      }
+    ],
+    "footer_italics": "📜🏠 Checking Anytown Planning Department records"
+  }
+}
