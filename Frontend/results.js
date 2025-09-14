@@ -16,12 +16,7 @@ function computeLikelihood(clear_outcome, scam_likelihood) {
   return Math.round(Math.min(Math.max(n, 0), 1) * 100);
 }
 
-// Apply header theme
-function setHeaderTheme(score) {
-  header.classList.remove("header--red","header--green","header--grey");
-  if (score === "Inconclusive") { header.classList.add("header--grey"); return; }
-  header.classList.add(score > 50 ? "header--red" : "header--green");
-}
+// Header theme function removed - keeping original header styling from index.html
 
 // Render helpers
 function renderReasons(items) {
@@ -33,7 +28,7 @@ function renderReasons(items) {
   for (const [kind, text] of items) {
     const li = document.createElement("li");
     const good = kind === "good";
-    const icon = good ? "✅" : "❌";
+    const icon = good ? "✅" : "⚠️";
     li.innerHTML = `<span class="${good ? "reason--good" : "reason--bad"}">${icon}</span> ${esc(text||"")}`;
     ul.appendChild(li);
   }
@@ -83,8 +78,8 @@ async function fetchResults(address) {
 function getMockResults(address) {
   // Simulate different scenarios based on address content
   const addressLower = address.toLowerCase();
-  const isHighRisk = addressLower.includes('suspicious') || addressLower.includes('scam') || addressLower.includes('wire');
-  const isLowRisk = addressLower.includes('legitimate') || addressLower.includes('safe') || addressLower.includes('verified');
+  const isHighRisk = addressLower.includes('mathilda');
+  const isLowRisk = addressLower.includes('king st');
   
   if (isHighRisk) {
     return {
@@ -181,11 +176,21 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // Compute score text
     const score = computeLikelihood(data.clear_outcome, data.scam_likelihood);
-    setHeaderTheme(score);
 
     // Populate header/summary
     $("#result-address").textContent = `Results for ${data.address || address || "Unknown Address"}`;
     $("#likelihood-value").textContent = (score === "Inconclusive") ? "Inconclusive" : `${score}%`;
+
+    // Apply conditional styling to likelihood box
+    const likelihoodEl = $(".likelihood");
+    likelihoodEl.classList.remove("likelihood--high", "likelihood--low", "likelihood--inconclusive");
+    if (score === "Inconclusive") {
+      likelihoodEl.classList.add("likelihood--inconclusive");
+    } else if (score > 50) {
+      likelihoodEl.classList.add("likelihood--high");
+    } else {
+      likelihoodEl.classList.add("likelihood--low");
+    }
 
     // Render lists
     renderReasons(data.reasons || []);

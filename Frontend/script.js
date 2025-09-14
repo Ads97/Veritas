@@ -370,9 +370,13 @@ async function handleFormSubmit(event) {
         
         if (response.ok) {
             const result = await response.json();
-            showSuccess(result);
-            clearForm();
-            clearDraftFromStorage();
+            
+            // Save address to sessionStorage for results page
+            const address = document.getElementById('houseAddress').value.trim();
+            sessionStorage.setItem('veritas_address', address);
+            
+            // Navigate to results page
+            window.location.href = 'results.html';
         } else {
             const error = await response.json();
             showError(error);
@@ -469,7 +473,7 @@ async function submitForm(formData) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Simulate different responses for testing
-    const shouldSucceed = Math.random() > 0.3; // 70% success rate for demo
+    const shouldSucceed = Math.random() >= 0; // 100% success rate for demo
     
     if (shouldSucceed) {
         return {
