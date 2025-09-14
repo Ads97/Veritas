@@ -24,24 +24,16 @@ window.ANALYSIS_DATA = {
         "url_label": "https://www.apartments.com/1300-lawton-st-san-francisco-ca/bl662l9/",
         "analyzing": "📄 Analyzing: 1300 Lawton St - San Francisco, CA - Apartments.com",
         "analysis": [
-          "Inconclusive: Name Address Match",
-          "Inconclusive: Scam Fraud Report",
-          "Inconclusive: Ownership Proof",
-          "Inconclusive: Legal News",
-          "Inconclusive: Alive Or Dead"
+          "⚠️ Caution: price found: 2200$",
         ]
       },
       {
         "n": 3,
-        "title": "Mary McClelland in California - Get Current Address, Phone & More",
+        "title": "1300 Lawton St #307, San Francisco, CA 94122 | Zillow",
         "url_label": "https://www.familytreenow.com/records/people/mcclelland/mary/area/ca",
-        "analyzing": "📄 Analyzing: Mary McClelland in California - Get Current Address, Phone & More",
+        "analyzing": "📄 Analyzing Zillow: 1300 Lawton St #307, San Francisco, CA 94122 | Zillow",
         "analysis": [
-          "Inconclusive: Name Address Match",
-          "Inconclusive: Scam Fraud Report",
-          "Inconclusive: Ownership Proof",
-          "Inconclusive: Legal News",
-          "Inconclusive: Alive Or Dead"
+          "⚠️ Caution: price found: 2250$",,
         ]
       },
       {

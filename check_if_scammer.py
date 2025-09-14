@@ -3,6 +3,7 @@ from openai_websearch import get_block_number
 from property_search import get_owner_name
 from Kamthe.SerperAPICall import search_google
 import asyncio 
+from zillow import analyze_zillow
 
 def are_names_similar(name, potential_name):
     potential_name_words = potential_name.lower().split(' ')
@@ -19,27 +20,31 @@ async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     
     # zillow search
     zillow_results = search_google(f"{address} zillow")
-    analyze_zillow_results = analyze_zillow_results(zillow_results)
+    zillow_rent_amount = analyze_zillow(zillow_results)
+    if zillow_rent_amount:
+        reported_rent_amount = 1000
+        if zillow_rent_amount > 1.2*reported_rent_amount:
+            print(f"🚩🚩🚩 RED FLAG ALERT: Zillow amount is {zillow_rent_amount}, much higher than reported rent amount {reported_rent_amount} 🚩🚩🚩")
     
-    print(f"📜🏠 Checking San Francisco Planning Department records")
-    block_details = get_block_number(address)
-    print(f"📋 Found tax block number '{block_details.block_number}', Lot number '{block_details.lot_number}'")
-    print(f"🧭 Finding owner details from County of San Francisco Assessor-Recorder Public Index Search")
-    print("<display browser use agent recorded video>")
-    potential_owner_names = await get_owner_name(block_number=block_details.block_number, lot_number=block_details.lot_number)
-    print(f"🪪 Found previous owner names {', '.join(potential_owner_names)}")
-    flag = False
-    matched_name = None
-    for potential_owner in potential_owner_names:
-        if are_names_similar(name, potential_owner):
-            flag=True
-            matched_name = potential_owner
-            break
+    # print(f"📜🏠 Checking San Francisco Planning Department records")
+    # block_details = get_block_number(address)
+    # print(f"📋 Found tax block number '{block_details.block_number}', Lot number '{block_details.lot_number}'")
+    # print(f"🧭 Finding owner details from County of San Francisco Assessor-Recorder Public Index Search")
+    # print("<display browser use agent recorded video>")
+    # potential_owner_names = await get_owner_name(block_number=block_details.block_number, lot_number=block_details.lot_number)
+    # print(f"🪪 Found previous owner names {', '.join(potential_owner_names)}")
+    # flag = False
+    # matched_name = None
+    # for potential_owner in potential_owner_names:
+    #     if are_names_similar(name, potential_owner):
+    #         flag=True
+    #         matched_name = potential_owner
+    #         break
     
-    if not flag:
-        print(f"🚩🚩🚩 RED FLAG ALERT: Declared owner does not match owner names in county records!! 🚩🚩🚩")
-    else:
-        print(f"✅ Declared name '{name}' matches with country record name '{matched_name}'")
+    # if not flag:
+    #     print(f"🚩🚩🚩 RED FLAG ALERT: Declared owner does not match owner names in county records!! 🚩🚩🚩")
+    # else:
+    #     print(f"✅ Declared name '{name}' matches with country record name '{matched_name}'")
     
     print("====== SUMMARY =====")
     if google_results['green_flag']:
