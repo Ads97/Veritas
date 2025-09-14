@@ -60,6 +60,24 @@ function renderQuestions(arr) {
   }
 }
 
+function renderSources(arr) {
+  const ul = $("#sources-list");
+  const empty = $("#sources-empty");
+  ul.innerHTML = "";
+  if (!Array.isArray(arr) || arr.length === 0) { empty.hidden = false; return; }
+  empty.hidden = true;
+  for (const url of arr) {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = url || "";
+    link.textContent = url || "";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    li.appendChild(link);
+    ul.appendChild(li);
+  }
+}
+
 // ---- Data load ----
 // Preferred: read address from query (?address=...) or from sessionStorage key "veritas_address"
 function getInputAddress() {
@@ -105,6 +123,11 @@ function getMockResults(address) {
         "Can you schedule an in-person viewing of the property?",
         "Has the landlord provided verifiable references or credentials?",
         "Are there any official property management companies associated with this listing?"
+      ],
+      sources: [
+        "https://www.ftc.gov/tips-advice/business-center/guidance/rental-listing-scams",
+        "https://www.consumer.ftc.gov/articles/0079-rental-scams",
+        "https://www.apartments.com/rental-manager/resources/article/rental-scams"
       ]
     };
   } else if (isLowRisk) {
@@ -129,6 +152,10 @@ function getMockResults(address) {
         "Have you completed the background check process?",
         "Are all lease terms clearly documented?",
         "Have you verified the property management company's credentials?"
+      ],
+      sources: [
+        "https://www.hud.gov/topics/rental_assistance/tenantrights",
+        "https://www.nolo.com/legal-encyclopedia/renters-rights"
       ]
     };
   } else {
@@ -150,6 +177,9 @@ function getMockResults(address) {
         "What payment methods are being requested?",
         "Have you been able to view the property in person?",
         "Are there any unusual requests or pressure tactics?"
+      ],
+      sources: [
+        "https://www.consumer.ftc.gov/articles/0079-rental-scams"
       ]
     };
   }
@@ -196,6 +226,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     renderReasons(data.reasons || []);
     renderAnalyzedData(data.analyzed_data || []);
     renderQuestions(data.additional_questions || []);
+    renderSources(data.sources || []);
 
     statusEl.innerHTML = "";
     card.hidden = false;
