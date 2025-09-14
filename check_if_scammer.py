@@ -18,7 +18,7 @@ async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     
     print(f"📜🏠 Checking San Francisco Planning Department records")
     block_details = get_block_number(address)
-    print(f"📋 Found tax block number {block_details.block_number}, Lot number {block_details.lot_number}")
+    print(f"📋 Found tax block number '{block_details.block_number}', Lot number '{block_details.lot_number}'")
     print(f"🧭 Finding owner details from County of San Francisco Assessor-Recorder Public Index Search")
     print("<display browser use agent recorded video>")
     potential_owner_names = await get_owner_name(block_number=block_details.block_number, lot_number=block_details.lot_number)
@@ -41,14 +41,16 @@ async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
         print(f"🟢 Found the following green flags from search results: 🟢")
         for k,v in google_results['green_flag'].items():
             print(f"🟢 Proof of {k}")
-            print(f"- {v['title']}")
-            print(f"- 🔗 {v['link']}")
-    if google_results['red_flags']:
+            for source in v:
+                print(f"- {source['title']}")
+                print(f"- 🔗 {source['link']}")
+    if google_results['red_flag']:
         print(f"🚩🚩🚩 RED FLAGS: Found the following green flags from search results: 🚩🚩🚩")
-        for k,v in google_results['green_flag'].items():
-            print(f"🟢 Proof of {k}")
-            print(f"- {v['title']}")
-            print(f"- 🔗 {v['link']}")
+        for k,v in google_results['red_flag'].items():
+            print(f"🚩 Contradictory proof found for {k}")
+            for source in v:
+                print(f"- {source['title']}")
+                print(f"- 🔗 {source['link']}")
         
     
     
