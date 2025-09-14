@@ -1,7 +1,11 @@
 import http.client
 import json
+import os
+from dotenv import load_dotenv
 
-def search_google(query, api_key='fb92e2a9c2f18088f758a1227a5b0dba0cc61ae6', num_results=5):
+load_dotenv()
+
+def search_google(query, api_key=os.getenv("SERPER_API_KEY"), num_results=5):
     """
     Search Google using Serper API and return the top search results.
     
