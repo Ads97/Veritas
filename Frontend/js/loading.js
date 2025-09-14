@@ -256,7 +256,7 @@
       await renderStreamForAddress(entry);
 
       // Wait a bit then redirect
-      await wait(400);
+      await wait(10000);
       window.location.href = 'results.html';
 
     } catch (error) {

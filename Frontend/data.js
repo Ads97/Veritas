@@ -24,7 +24,7 @@ window.ANALYSIS_DATA = {
         "url_label": "https://www.apartments.com/1300-lawton-st-san-francisco-ca/bl662l9/",
         "analyzing": "📄 Analyzing: 1300 Lawton St - San Francisco, CA - Apartments.com",
         "analysis": [
-          "⚠️ Caution: price found: 2200$",
+          "⚠️ Caution: Different price found: $2200",
         ]
       },
       {
@@ -33,7 +33,7 @@ window.ANALYSIS_DATA = {
         "url_label": "https://www.familytreenow.com/records/people/mcclelland/mary/area/ca",
         "analyzing": "📄 Analyzing Zillow: 1300 Lawton St #307, San Francisco, CA 94122 | Zillow",
         "analysis": [
-          "⚠️ Caution: price found: 2250$",,
+          "⚠️ Caution: Different price found: $2250",,
         ]
       },
       {
@@ -63,7 +63,7 @@ window.ANALYSIS_DATA = {
         ]
       }
     ],
-    "footer_italics": "🚩 RED FLAG: Declared owner does not match owner names in county records 🚩"
+    "footer_italics": "🚩 RED FLAG: Declared owner does not match owner names in county records"
   },
   "88 King Street, Unit 116, San Francisco 94107": {
     "heading": "🔎 Searching Online",
