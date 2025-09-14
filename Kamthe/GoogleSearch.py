@@ -1,8 +1,9 @@
-from SerperAPICall import search_google
-from firecrawl_scraper import scrape_url_simple
+from Kamthe.SerperAPICall import search_google
+from Kamthe.firecrawl_scraper import scrape_url_simple
 import requests
 import os
 from dotenv import load_dotenv
+import json 
 
 load_dotenv()
 
@@ -110,14 +111,33 @@ def search_and_analyze_landlord(name, address):
     print(f"✅ Found {len(results)} results")
     print("-" * 60)
     
+    return_results = {'green_flag': {}, 'red_flag': {}}
     # Analyze each result
     for i, result in enumerate(results, 1):
         print(f"\n{i}. {result['title']}")
         print(f"   🔗 {result['link']}")
         
         analysis = analyze_landlord(name, address, result)
-        print(f"   🤖 Analysis: {analysis}")
+        print(f"   🤖 Analysis")
+        analysis = json.loads(analysis)
+        for k,v in analysis.items():
+            string_readable_k = ' '.join([word.capitalize() for word in k.split('_')])
+            if v==1:
+                print(f"{string_readable_k}: ✅")
+                if string_readable_k in return_results['green_flag']:
+                    return_results['green_flag'][string_readable_k].append(result)
+                else:
+                    return_results['green_flag'][string_readable_k] = [result]
+            elif v==-1:
+                print(f"🚩🚩🚩 RED FLAG ALERT: {string_readable_k} 🚩🚩🚩")
+                if string_readable_k in return_results['red_flag']:
+                    return_results['red_flag'][string_readable_k].append(result)
+                else:
+                    return_results['red_flag'][string_readable_k] = [result]
+            elif v==0:
+                print(f"Inconclusive: {string_readable_k}")
         print("-" * 60)
+    return return_results
 
 
 def main():
