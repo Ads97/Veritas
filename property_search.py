@@ -8,9 +8,13 @@ os.environ['ANONYMIZED_TELEMETRY'] = "false"
 
 async def main():
     llm = ChatOpenAI(model="gpt-4.1")
-    task = "Go to this url https://recorder.sfgov.org/#!/simple. Enter the block number 3793 and lot number 028. Ignore all other fields and hit search. List the names of the owners for all the documents "
+    task = "Go to this url https://recorder.sfgov.org/#!/simple. Enter the block number 3793 and lot number 028. IMPORTANT: Leave all other fields blank. Hit search. return the list of names that appears on the page and end immediately - don't navigate on the page."
     agent = Agent(task=task, llm=llm)
-    await agent.run()
+    history=await agent.run(max_steps=20)
+    result = history.final_result()
+    if not result:
+        raise Exception(f"Browser use returned None!")
+    print(f"{result=}")
 
 if __name__ == "__main__":
     asyncio.run(main())
