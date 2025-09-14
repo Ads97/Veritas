@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritas AI - Rental Scam Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Veritas AI</h1>
+            <p class="subtitle">AI tool for rental scam detection</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Form Card -->
+            <div class="form-card">
+                <form id="veritas-form" class="form" novalidate>
+                    <!-- Field 1: House Address -->
+                    <div class="field-group">
+                        <label for="houseAddress" class="field-label">
+                            <span class="label-text">House Address</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="houseAddress" 
+                            name="houseAddress" 
+                            class="field-input" 
+                            placeholder="Enter house address here"
+                            required
+                            minlength="5"
+                            maxlength="200"
+                            aria-describedby="houseAddress-hint houseAddress-error"
+                        >
+                        <div id="houseAddress-hint" class="field-hint">
+                            e.g., 123 Main St, San Francisco, CA 94102
+                        </div>
+                        <div id="houseAddress-error" class="field-error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Field 2: House Listing URL -->
+                    <div class="field-group">
+                        <label for="listingUrl" class="field-label">
+                            <span class="label-text">House listing URL</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="url" 
+                            id="listingUrl" 
+                            name="listingUrl" 
+                            class="field-input" 
+                            placeholder="Enter house listing here"
+                            required
+                            minlength="5"
+                            maxlength="500"
+                            aria-describedby="listingUrl-hint listingUrl-error"
+                        >
+                        <div id="listingUrl-hint" class="field-hint">
+                            e.g., https://craigslist.org/listing/123 or https://zillow.com/property/456
+                        </div>
+                        <div id="listingUrl-error" class="field-error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Field 3: Other Details -->
+                    <div class="field-group">
+                        <label for="otherDetails" class="field-label">
+                            <span class="label-text">Other details</span>
+                            <span class="optional">(optional but recommended)</span>
+                        </label>
+                        <div class="field-description">
+                            This may include conversations with the landlord, payment details the landlord has provided, etc, house information, etc
+                        </div>
+                        <textarea 
+                            id="otherDetails" 
+                            name="otherDetails" 
+                            class="field-textarea" 
+                            placeholder="Enter details here"
+                            rows="5"
+                            maxlength="10000"
+                            aria-describedby="otherDetails-hint otherDetails-error"
+                        ></textarea>
+                        <div id="otherDetails-hint" class="field-hint">
+                            Include any suspicious requests, unusual payment methods, or concerning communications
+                        </div>
+                        <div id="otherDetails-error" class="field-error" role="alert" aria-live="polite"></div>
+                        <div class="char-counter">
+                            <span id="otherDetails-count">0</span> / 10,000 characters
+                        </div>
+                    </div>
+
+                    <!-- Field 4: File Upload -->
+                    <div class="field-group">
+                        <label for="fileUpload" class="field-label">
+                            <span class="label-text">Documentation</span>
+                        </label>
+                        <div class="field-description">
+                            Include any pictures of property, screenshots of conversations, rental agreements, lease agreements, etc.
+                        </div>
+                        
+                        <!-- Upload Zone -->
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-content">
+                                <div class="upload-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                </div>
+                                <div class="upload-text">
+                                    <p class="upload-primary">Drop files here or click to browse</p>
+                                    <p class="upload-secondary">PNG, JPG, JPEG, WebP, PDF, HEIC up to 25MB each</p>
+                                </div>
+                            </div>
+                            <input 
+                                type="file" 
+                                id="fileUpload" 
+                                name="files" 
+                                class="file-input" 
+                                multiple 
+                                accept=".png,.jpg,.jpeg,.webp,.pdf,.heic"
+                                aria-describedby="fileUpload-hint fileUpload-error"
+                            >
+                        </div>
+                        
+                        <!-- File Previews -->
+                        <div id="filePreviews" class="file-previews"></div>
+                        
+                        <div id="fileUpload-hint" class="field-hint">
+                            Maximum 20 files, 25MB per file, 200MB total
+                        </div>
+                        <div id="fileUpload-error" class="field-error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Consent Checkbox -->
+                    <div class="field-group">
+                        <div class="checkbox-group">
+                            <input 
+                                type="checkbox" 
+                                id="privacyConsent" 
+                                name="privacyConsent" 
+                                class="checkbox-input" 
+                                required
+                                aria-describedby="privacyConsent-error"
+                            >
+                            <label for="privacyConsent" class="checkbox-label">
+                                I agree to the <a href="#" class="privacy-link">Privacy Policy</a>
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div id="privacyConsent-error" class="field-error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="submit-section">
+                        <button type="submit" id="submitBtn" class="submit-btn">
+                            <span class="btn-text">Submit</span>
+                            <span class="btn-spinner" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Result & Feedback Area -->
+            <div id="resultArea" class="result-area" style="display: none;">
+                <!-- Success Banner -->
+                <div id="successBanner" class="success-banner" style="display: none;">
+                    <div class="banner-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22,4 12,14.01 9,11.01"/>
+                        </svg>
+                    </div>
+                    <div class="banner-content">
+                        <h3>Submitted for analysis</h3>
+                        <p>We'll surface results below.</p>
+                    </div>
+                </div>
+
+                <!-- Status Card -->
+                <div id="statusCard" class="status-card" style="display: none;">
+                    <div class="status-header">
+                        <h4>Analysis Status</h4>
+                        <div class="status-spinner"></div>
+                    </div>
+                    <div class="status-content">
+                        <p>Job ID: <span id="jobId" class="job-id"></span></p>
+                        <p>Estimated wait time: <span id="waitTime"></span> seconds</p>
+                    </div>
+                </div>
+
+                <!-- Error Alert -->
+                <div id="errorAlert" class="error-alert" style="display: none;">
+                    <div class="alert-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h4>Submission Failed</h4>
+                        <p id="errorMessage">An error occurred while processing your submission.</p>
+                        <p class="error-id">Error ID: <span id="errorId"></span></p>
+                        <button type="button" id="retryBtn" class="retry-btn">Try Again</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Draft Save Notification -->
+            <div id="draftNotification" class="draft-notification" style="display: none;">
+                <span class="draft-text">Draft saved</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
