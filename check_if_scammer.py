@@ -55,8 +55,10 @@ async def check_if_scammer(name, address,listing_url, other_details, **kwargs):
     
     
 async def main():
-    name = "Mary McClelland"
-    address = "1300 Lawton St #307, San Francisco, CA 94122"
+    # name = "Mary McClelland"
+    # address = "1300 Lawton St #307, San Francisco, CA 94122"
+    name = "Mittie J. Priest"
+    address = "4350 Kirkham St, San Francisco, CA 94122"
     listing_url = ""
     other_details = ""
     result = await check_if_scammer(name, address, listing_url, other_details)
