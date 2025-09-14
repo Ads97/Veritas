@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Veritas AI — Results</title>
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Minimal, scoped additions -->
+  <link rel="stylesheet" href="results.css" />
+</head>
+<body>
+  <!-- Header: background color is set dynamically by results.js -->
+  <header id="app-header" class="header">
+    <div class="container">
+      <h1 class="title">Veritas AI</h1>
+      <p class="subtitle">AI tool for rental scam detection</p>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <!-- Status / errors -->
+      <section id="status" aria-live="polite"></section>
+
+      <!-- Results card -->
+      <section id="results-card" class="form-card" hidden>
+        <h2 id="result-address" class="section-heading"></h2>
+
+        <p class="likelihood">
+          <strong>Scam Likelihood: </strong>
+          <strong id="likelihood-value"></strong>
+        </p>
+
+        <hr class="divider" />
+
+        <section aria-labelledby="reasons-h">
+          <h3 id="reasons-h" class="section-subheading">Reasons</h3>
+          <ul id="reasons-list" class="bulleted"></ul>
+          <p id="reasons-empty" class="muted" hidden>No reasons found.</p>
+        </section>
+
+        <section aria-labelledby="insights-h" class="section-spaced">
+          <h3 id="insights-h" class="section-subheading">Insights</h3>
+          <ul id="insights-list" class="bulleted"></ul>
+          <p id="insights-empty" class="muted" hidden>No insights found.</p>
+        </section>
+
+        <section aria-labelledby="questions-h" class="section-spaced">
+          <h3 id="questions-h" class="section-subheading">Additional Questions</h3>
+          <ul id="questions-list" class="bulleted"></ul>
+          <p id="questions-empty" class="muted" hidden>No additional questions.</p>
+        </section>
+
+        <div class="actions">
+          <a class="btn" href="index.html" role="button" aria-label="Restart">Restart</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="results.js" defer></script>
+</body>
+</html>
