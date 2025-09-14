@@ -7,9 +7,9 @@ window.ANALYSIS_DATA = {
     "results": [
       {
         "n": 1,
-        "title": "HERVIA FROM FINLAND Sauna BATHING INSTRUCTIONS In Heat ...",
-        "url_label": "https://www.facebook.com/groups/sfroomateexchange/posts/3829417773857357/",
-        "analyzing": "📄 Analyzing: HERVIA FROM FINLAND Sauna BATHING INSTRUCTIONS In Heat ...",
+        "title": "People named Mary McClelland.",
+        "url_label": "facebook.com/search/top/?q=Mary+McClelland",
+        "analyzing": "📄 Analyzing: View the profiles of people named Mary McClelland. Join Facebook to connect with Mary ... Mary McClelland. Lives in San Francisco, California. View profile ·",
         "analysis": [
           "Inconclusive: Name Address Match",
           "Inconclusive: Scam Fraud Report",
@@ -46,9 +46,9 @@ window.ANALYSIS_DATA = {
       },
       {
         "n": 4,
-        "title": "[PDF] Diversity Suppliers 5/20/16 | Access Tufts",
-        "url_label": "https://access.tufts.edu/sites/default/files/finance/Diversity-Suppliers_5-20-16.pdf",
-        "analyzing": "📄 Analyzing: [PDF] Diversity Suppliers 5/20/16 | Access Tufts",
+        "title": "LinkedIn · Mary McClelland 4 followers",
+        "url_label": "https://www.linkedin.com/in/mary-mcclelland-351832b9",
+        "analyzing": "📄 Analyzing: Mary McClelland Hayward, California, United States · Ramp lead · McGee Air Services",
         "analysis": [
           "Inconclusive: Name Address Match",
           "Inconclusive: Scam Fraud Report",
